@@ -5,18 +5,13 @@ let cartaoAtual = 0;
 
 cartoes.forEach((cartao) => {
   cartao.addEventListener("click", function () {
-    const cartaVirada = cartao.querySelector(".carta-virada");
-
-    cartao.classList.toggle("virar");
-    cartaVirada.classList.toggle("mostrar-fundo-carta");
-
-    const descricao = cartao.querySelector(".descricao");
-    descricao.classList.toggle("esconder");
+    toggleEstadoCarta(cartaoAtual);
   });
 });
 
 btnAvancar.addEventListener("click", function () {
-  if (cartaoAtual === cartoes.length - 1) return;
+  cartaoEstaVisivel(cartaoAtual);
+  if (cartaoAtual === cartoes.length - 1) cartaoAtual = -1;
 
   esconderCartaoSelecionado();
 
@@ -25,13 +20,30 @@ btnAvancar.addEventListener("click", function () {
 });
 
 btnVoltar.addEventListener("click", function () {
-  if (cartaoAtual === 0) return;
+  cartaoEstaVisivel(cartaoAtual);
+  if (cartaoAtual === 0) cartaoAtual = cartoes.length;
 
   esconderCartaoSelecionado();
 
   cartaoAtual--;
   mostrarCartao(cartaoAtual);
 });
+
+function cartaoEstaVisivel(cartaoAtual) {
+  const cartao = cartoes[cartaoAtual];
+
+  const cartaoEstaVirado = cartao.classList.contains("virar");
+  if (cartaoEstaVirado) toggleEstadoCarta(cartaoAtual);
+}
+
+function toggleEstadoCarta(cartaoAtual) {
+  const cartao = cartoes[cartaoAtual];
+  const cartaVirada = cartao.querySelector(".carta-virada");
+  cartao.classList.toggle("virar");
+  cartaVirada.classList.toggle("mostrar-fundo-carta");
+  const descricao = cartao.querySelector(".descricao");
+  descricao.classList.toggle("esconder");
+}
 
 function mostrarCartao(cartaoAtual) {
   cartoes[cartaoAtual].classList.add("selecionado");
